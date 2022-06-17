@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="315fcb4cde6041b392d3125a051a4f4b" Name="Diagram1">
+        <EntityTypeShape EntityType="InterselModel.ApplicationUser" Width="1.5" PointX="0.75" PointY="1.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="InterselModel.CallDetail" Width="1.5" PointX="2.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InterselModel.CellLine" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="InterselModel.Role" Width="1.5" PointX="0.75" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="InterselModel.UserRole" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="InterselModel.FK__UserRole__Applic__6E01572D" ManuallyRouted="false" />
+        <AssociationConnector Association="InterselModel.FK__UserRole__RoleId__6EF57B66" ManuallyRouted="false" />
+        <AssociationConnector Association="InterselModel.FK_UserRole_UserRole" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

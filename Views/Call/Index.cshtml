@@ -1,0 +1,158 @@
+﻿@model  IEnumerable<Intersel_Practica.Models.CellLine>
+@{
+    ViewBag.Title = "Listado de Celulares";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<head>
+    <style>
+        .alert {
+            background-color: RGB(0,86,135);
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+        .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
+            background-color:lightcyan;
+        }
+    </style>
+</head>
+<div class="alert" role="alert">
+    Listado de Celulares
+</div>
+
+<table class="table table-striped" id="tblCellLine">
+    <thead style="background-color:RGB(0,86,135);color:white">
+        <tr>
+            <th>Celular</th>
+            <th>Descripcion</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td style="cursor:pointer" onclick="getCellLineInfo(@item.MobileLine,'@item.Description')">@item.MobileLine</td>
+                    <td>@item.Description</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="width:100%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="alert" role="alert" style="width:100%">
+                    Detalle de llamadas
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="row" style="max-height: 500px; width:100%; overflow: auto;">
+                    <table class="table table-striped" id="tblCallDetail">
+                        <thead style="background-color:RGB(0,86,135);color:white;">
+                            <tr>
+                                <th>Celular</th>
+                                <th>Descripción</th>
+                                <th>Número marcado</th>
+                                <th>Lugar</th>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                                <th>Duración</th>
+                                <th>Costo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal();">Cerrar</button>
+                </div>
+            </div>
+    </div>
+</div>
+@section Scripts {
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.11.3/dataRender/datetime.js"></script>
+    <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.2/moment.min.js"></script>
+
+}
+<script>
+    $(document).ready(function () {
+        $('#tblCellLine').DataTable({
+            order: [],
+            //scrollY: "200px",
+            scrollX: true,
+            autoWidth: false,
+            scrollCollapse: true,
+            fixedColumns: {
+            },
+            searching: true,
+            paging: true,
+            pageLength: 10,
+            info: true,
+            lengthChange: true,
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+            }
+
+        });
+
+    });
+
+    function getCellLineInfo(mobileLine, description) {
+        var model = { MobileLine: mobileLine, Description: description };
+        $.ajax({
+            type: "POST",
+            url: "../Call/GetCallDetailByMobileLine",
+            contentType: "application/json",
+            data: JSON.stringify(model),
+            dataType: "json",
+            success: function (response) {
+                if (response.status == true) {
+                    $('#tblCallDetail').DataTable({
+                        destroy: true,
+                        data: response.lines,
+                        columns: [
+                            { title: "Celular", data: "MobileLine", className: 'dt-body-justify' },
+                            { title: "Descripción", data: "Description", className: 'dt-body-justify' },
+                            { title: "Número marcado", data: "CalledPartyNumber", className: 'dt-body-justify' },
+                            { title: "Lugar", data: "CalledPartyDescription", className: 'dt-body-justify' },
+                            { title: "Fecha", data: "DateTime", className: 'dt-body-center' },
+                            { title: "Hora", data: "Hour", className: 'dt-body-center' },
+                            { title: "Duración", data: "Duration", className: 'dt-body-center' },
+                            { title: "Costo", data: "TotalCost", className: 'dt-body-center', render: $.fn.dataTable.render.number(',', '.', 2, '$') }
+                        ],
+                        order: [],
+                        //scrollY: "200px",
+                        //scrollX: true,
+                        scrollCollapse: true,
+                        fixedColumns: {
+                        },
+                        searching: true,
+                        paging: true,
+                        pageLength: 10,
+                        info: true,
+                        lengthChange: true,
+                        "language": {
+                            "url": "//cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Spanish.json"
+                        }
+                    });
+                    $("#staticBackdrop").toggle();
+                }
+
+            }
+        });
+    }
+
+    function closeModal() {
+        $("#staticBackdrop").toggle();
+    }
+</script>

@@ -1,0 +1,19 @@
+﻿@{
+    var user = (string)Session["User"];
+    ViewBag.Title = "Home";
+}
+
+<head>
+    <style>
+        .alert {
+            background-color: RGB(0,86,135);
+            border-radius: 8px;
+            color: white;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            transition: 0.3s;
+        }
+    </style>
+</head>
+<div class="alert" role="alert">
+    ¡Bienvenido @user!
+</div>
